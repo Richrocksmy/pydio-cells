@@ -7,12 +7,18 @@ networks:
     external: false
 
 services:
-  blog:
-    image: wordpress:4.9.8-apache
+  cells:
+    image: pydio/cells:latest
+    restart: unless-stopped
+    ports: [ "8080:8080" ]
     environment:
-      WORDPRESS_DB_PASSWORD:
+      - CELLS_LOG_LEVEL=production
+      - CELLS_BIND=:8080
+    volumes:
+      - data:/var/cells/data
+      - cellsdir:/var/cells
     labels:
-      - traefik.http.routers.blog.rule=Host(`blog.ovcloud.io`)
+      - traefik.http.routers.blog.rule=Host(`drive.ovcloud.io`)
       - traefik.http.routers.blog.tls=true
       - traefik.http.routers.blog.tls.certresolver=lets-encrypt
       - traefik.port=80
@@ -20,26 +26,18 @@ services:
       - internal
       - web
     depends_on:
-      - mysql
+      - db
 
-  mysql:
-    image: mysql:5.7
+  db:
+    image: postgres:latest
     environment:
-      MYSQL_ROOT_PASSWORD:
+      POSTGRES_PASSWORD:
     networks:
       - internal
     labels:
       - traefik.enable=false
 
-  adminer:
-    image: adminer:4.6.3-standalone
-    labels:
-      - traefik.http.routers.adminer.rule=Host(`db-admin.ovcloud.io`)
-      - traefik.http.routers.adminer.tls=true
-      - traefik.http.routers.adminer.tls.certresolver=lets-encrypt
-      - traefik.port=8080
-    networks:
-      - internal
-      - web
-    depends_on:
-      - mysql
+volumes:
+  data: {}
+  cellsdir: {}
+  mysqldir: {}

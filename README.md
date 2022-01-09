@@ -9,7 +9,8 @@ Three DNS A records (monitor.ovcloud.io, blog.ovcloud.io, db-admin.ovcloud.io) p
 # Installation Steps
 
 1. Run ```install-docker.sh``` to install Docker and Docker Compose
-2. Run a Traefik container with the following command:
+2. Create the external docker network using - ```docker network create web```
+3. Run a Traefik container with the following command:
 
 ```java
     docker run -d \
@@ -30,6 +31,10 @@ Three DNS A records (monitor.ovcloud.io, blog.ovcloud.io, db-admin.ovcloud.io) p
 To stop the services run - ```docker-compose down```
 
 Stop the Traefik container - Use ```docker ps``` to find the container id, then run ```docker stop {container_id}```
+
+# Notes
+
+Used [this](https://www.digitalocean.com/community/tutorials/how-to-use-traefik-v2-as-a-reverse-proxy-for-docker-containers-on-ubuntu-20-04) article for reference.
 
 
 
