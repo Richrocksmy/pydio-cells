@@ -14,13 +14,14 @@ services:
     environment:
       - CELLS_LOG_LEVEL=production
       - CELLS_BIND=:8080
+      - CELLS_NO_TLS=1
     volumes:
       - data:/var/cells/data
       - cellsdir:/var/cells
     labels:
-      - traefik.http.routers.blog.rule=Host(`drive.ovcloud.io`)
-      - traefik.http.routers.blog.tls=true
-      - traefik.http.routers.blog.tls.certresolver=lets-encrypt
+      - traefik.http.routers.drive.rule=Host(`drive.ovcloud.io`)
+      - traefik.http.routers.drive.tls=true
+      - traefik.http.routers.drive.tls.certresolver=lets-encrypt
       - traefik.port=80
     networks:
       - internal
@@ -29,13 +30,41 @@ services:
       - db
 
   db:
-    image: postgres:latest
+    image: mysql:8
+    restart: unless-stopped
     environment:
-      POSTGRES_PASSWORD:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: cells
+      MYSQL_USER: cells
+      MYSQL_PASSWORD: password
     networks:
       - internal
     labels:
       - traefik.enable=false
+
+  collabora:
+    image: collabora/code:latest
+    restart: unless-stopped
+    networks:
+      - internal
+    labels:
+      - traefik.enable=false
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    environment:
+      - PMA_ARBITRARY=1
+    labels:
+      - traefik.http.routers.adminer.rule=Host(`db-admin.ovcloud.io`)
+      - traefik.http.routers.adminer.tls=true
+      - traefik.http.routers.adminer.tls.certresolver=lets-encrypt
+      - traefik.port=8080
+    networks:
+      - internal
+      - web
+    depends_on:
+      - db
 
 volumes:
   data: {}

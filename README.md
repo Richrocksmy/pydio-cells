@@ -37,4 +37,11 @@ Stop the Traefik container - Use ```docker ps``` to find the container id, then 
 Used [this](https://www.digitalocean.com/community/tutorials/how-to-use-traefik-v2-as-a-reverse-proxy-for-docker-containers-on-ubuntu-20-04) article for reference.
 
 
+# Todo
+
+- ```CELLS_NO_TLS=1``` TLS is cells has been disabled, is this OK because ssl termination is handled by Traefik?
+- Create docker networks automatically
+- Add Traefik to docker compose
+- Connect from phone / other devices (potential problems with firewall and gRPC ports)
+- Use postgres instead of MySql
 
