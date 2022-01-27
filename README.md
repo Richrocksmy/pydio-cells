@@ -44,6 +44,7 @@ Used [this](https://www.digitalocean.com/community/tutorials/how-to-use-traefik-
 - Add Traefik to docker compose
 - Connect from phone / other devices (potential problems with firewall and gRPC ports)
 - Use postgres instead of MySql
+- Remove phpMyAdmin
 
 Current state:
 
