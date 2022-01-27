@@ -12,7 +12,7 @@ Three DNS A records (monitor.ovcloud.io, blog.ovcloud.io, db-admin.ovcloud.io) p
 2. Create the external docker network using - ```docker network create web```
 3. Run a Traefik container with the following command:
 
-```java
+```shell
     docker run -d \
       -v /var/run/docker.sock:/var/run/docker.sock \
       -v $PWD/traefik.toml:/traefik.toml \
@@ -45,3 +45,6 @@ Used [this](https://www.digitalocean.com/community/tutorials/how-to-use-traefik-
 - Connect from phone / other devices (potential problems with firewall and gRPC ports)
 - Use postgres instead of MySql
 
+Current state:
+
+Need to figure out how to connect to Collabora
