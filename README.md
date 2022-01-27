@@ -45,6 +45,7 @@ Used [this](https://www.digitalocean.com/community/tutorials/how-to-use-traefik-
 - Connect from phone / other devices (potential problems with firewall and gRPC ports)
 - Use postgres instead of MySql
 - Remove phpMyAdmin
+- Tidy up security / passwords
 
 Current state:
 

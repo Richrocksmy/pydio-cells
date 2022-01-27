@@ -48,8 +48,13 @@ services:
     restart: unless-stopped
     networks:
       - internal
+      - web
+      - 
     labels:
-      - traefik.enable=false
+      - traefik.http.routers.office.rule=Host(`office.ovcloud.io`)
+      - traefik.http.routers.office.tls=true
+      - traefik.http.routers.office.tls.certresolver=lets-encrypt
+      - traefik.port=9980
 
   phpmyadmin:
     image: phpmyadmin
