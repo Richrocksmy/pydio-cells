@@ -38,6 +38,8 @@ services:
       MYSQL_DATABASE: cells
       MYSQL_USER: cells
       MYSQL_PASSWORD: password
+    volumes:
+      - mysqldir:/var/lib/mysql
     networks:
       - internal
     labels:
@@ -46,10 +48,19 @@ services:
   collabora:
     image: collabora/code:latest
     restart: unless-stopped
+    environment:
+      - "extra_params=--o:ssl.enable=false --o:ssl.termination=true"
+      - "username=admin"
+      - "password=admin"
+      - "domain=drive\\.ovcloud\\.io"
+      - "server_name=office.ovcloud.io"
+    expose:
+      - 9980
+    cap_add:
+      - MKNOD
     networks:
       - internal
       - web
-      - 
     labels:
       - traefik.http.routers.office.rule=Host(`office.ovcloud.io`)
       - traefik.http.routers.office.tls=true

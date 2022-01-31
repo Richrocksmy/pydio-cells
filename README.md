@@ -46,7 +46,8 @@ Used [this](https://www.digitalocean.com/community/tutorials/how-to-use-traefik-
 - Use postgres instead of MySql
 - Remove phpMyAdmin
 - Tidy up security / passwords
+- Lock docker containers at specific versions
 
 Current state:
 
-Need to figure out how to connect to Collabora
+Need to figure out how to connect to Collabora - can connect to office.ovcloud.io but get 502 when opening document
