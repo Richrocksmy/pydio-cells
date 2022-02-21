@@ -36,6 +36,7 @@ Stop the Traefik container - Use ```docker ps``` to find the container id, then 
 
 Used [this](https://www.digitalocean.com/community/tutorials/how-to-use-traefik-v2-as-a-reverse-proxy-for-docker-containers-on-ubuntu-20-04) article for reference.
 
+[Useful info about Libreoffice docker](https://github.com/smehrbrodt/nextcloud-libreoffice-online/blob/master/libreoffice-online/.env.sample)
 
 # Todo
 
@@ -47,6 +48,7 @@ Used [this](https://www.digitalocean.com/community/tutorials/how-to-use-traefik-
 - Remove phpMyAdmin
 - Tidy up security / passwords
 - Lock docker containers at specific versions
+- Use environment values in the same way across docker compose
 
 Current state:
 
