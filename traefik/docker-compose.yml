@@ -1,0 +1,91 @@
+version: "3"
+
+networks:
+  web:
+    external: true
+  internal:
+    external: false
+
+services:
+  cells:
+    image: pydio/cells:latest
+    restart: unless-stopped
+    ports: [ "8080:8080" ]
+    environment:
+      - CELLS_LOG_LEVEL=production
+      - CELLS_BIND=:8080
+      - CELLS_EXTERNAL=https://drive.ovcloud.io
+      - CELLS_NO_TLS=1
+    volumes:
+      - data:/var/cells/data
+      - cellsdir:/var/cells
+    labels:
+      - traefik.http.routers.drive.rule=Host(`drive.ovcloud.io`)
+      - traefik.http.routers.drive.tls=true
+      - traefik.http.routers.drive.tls.certresolver=lets-encrypt
+      - traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto = https
+      - traefik.port=80
+    networks:
+      - internal
+      - web
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: cells
+      MYSQL_USER: cells
+      MYSQL_PASSWORD: password
+    volumes:
+      - mysqldir:/var/lib/mysql
+    networks:
+      - internal
+    labels:
+      - traefik.enable=false
+
+  collabora:
+    image: collabora/code
+    restart: unless-stopped
+    environment:
+      - "extra_params=--o:ssl.enable=false --o:ssl.termination=true"
+      - "username=admin"
+      - "password=admin"
+      - "domain=drive\\.ovcloud\\.io"
+      - "server_name=office.ovcloud.io"
+    expose:
+      - 9980
+    cap_add:
+      - MKNOD
+    networks:
+      - internal
+      - web
+    labels:
+      - traefik.http.routers.office.rule=Host(`office.ovcloud.io`)
+      - traefik.http.routers.office.tls=true
+      - traefik.http.routers.office.tls.certresolver=lets-encrypt
+      - traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto = https
+      - traefik.port=9980
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    environment:
+      - PMA_ARBITRARY=1
+    labels:
+      - traefik.http.routers.adminer.rule=Host(`db-admin.ovcloud.io`)
+      - traefik.http.routers.adminer.tls=true
+      - traefik.http.routers.adminer.tls.certresolver=lets-encrypt
+      - traefik.port=8080
+    networks:
+      - internal
+      - web
+    depends_on:
+      - db
+
+volumes:
+  data: {}
+  cellsdir: {}
+  mysqldir: {}

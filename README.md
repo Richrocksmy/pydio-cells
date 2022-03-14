@@ -36,6 +36,8 @@ Stop the Traefik container - Use ```docker ps``` to find the container id, then 
 
 Used [this](https://www.digitalocean.com/community/tutorials/how-to-use-traefik-v2-as-a-reverse-proxy-for-docker-containers-on-ubuntu-20-04) article for reference.
 
+[Collabora quick start](https://www.collaboraoffice.com/code/quick-tryout-nextcloud-docker/)
+
 [Useful info about Libreoffice docker](https://github.com/smehrbrodt/nextcloud-libreoffice-online/blob/master/libreoffice-online/.env.sample)
 
 # Todo

@@ -19,20 +19,15 @@ services:
     volumes:
       - data:/var/cells/data
       - cellsdir:/var/cells
-    labels:
-      - traefik.http.routers.drive.rule=Host(`drive.ovcloud.io`)
-      - traefik.http.routers.drive.tls=true
-      - traefik.http.routers.drive.tls.certresolver=lets-encrypt
-      - traefik.port=80
     networks:
-      - internal
       - web
     depends_on:
       - db
 
   db:
-    image: mysql:8
+    image: mariadb:latest
     restart: unless-stopped
+    ports: [ "3306:3306" ]
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: cells
@@ -41,44 +36,30 @@ services:
     volumes:
       - mysqldir:/var/lib/mysql
     networks:
-      - internal
-    labels:
-      - traefik.enable=false
+      - web
 
   collabora:
-    image: collabora/code:latest
+    image: collabora/code
     restart: unless-stopped
+    ports: [ "9980:9980" ]
     environment:
       - "extra_params=--o:ssl.enable=false --o:ssl.termination=true"
       - "username=admin"
       - "password=admin"
-      - "domain=drive\\.ovcloud\\.io"
-      - "server_name=office.ovcloud.io"
-    expose:
-      - 9980
+      - "domain=172\\.16\\.0\\.15"
+      - "server_name=172.16.0.15"
     cap_add:
       - MKNOD
     networks:
-      - internal
       - web
-    labels:
-      - traefik.http.routers.office.rule=Host(`office.ovcloud.io`)
-      - traefik.http.routers.office.tls=true
-      - traefik.http.routers.office.tls.certresolver=lets-encrypt
-      - traefik.port=9980
 
   phpmyadmin:
     image: phpmyadmin
     restart: always
+    ports: [ "8081:8080" ]
     environment:
       - PMA_ARBITRARY=1
-    labels:
-      - traefik.http.routers.adminer.rule=Host(`db-admin.ovcloud.io`)
-      - traefik.http.routers.adminer.tls=true
-      - traefik.http.routers.adminer.tls.certresolver=lets-encrypt
-      - traefik.port=8080
     networks:
-      - internal
       - web
     depends_on:
       - db
